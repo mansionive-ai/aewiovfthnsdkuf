@@ -628,7 +628,8 @@ const pages = {
 10031: { text: '[찢어진 종이]<br><br>나 옆반 걸레년한테 고백받음 ㅅㅂ ㅋㅋ', goto: 10030 },
 10033: { text: '[일기장]<br><br>오늘도 일진무리가 그녀에게 찾아가 폭행했습니다. <br>아무도 그녀를 도와주지 않아요.<br>일진녀의 부모 백 때문인지 협박 때문인지 선생들도 쉬쉬합니다.<br>이 사람들의 잘못된 행동들을 제가 일기로 기록해야겠어요.', goto:10030 },
 10035: '[곰인형]<br><br>미소가 일그러진 곰인형이 있다.',
-
+  10094: {
+    text: "[핸드폰]<br><br>핸드폰이 떨어져있다.<br><br>전원이 켜져있지만 비밀번호가 걸려있다."},
 
 // 과학실 관련
 10032: '[과학실]',
@@ -636,7 +637,10 @@ const pages = {
 10045: { text: '[일기장]<br><br>저는 그녀에게 찾아가 도와주겠다고, 힘든거 있으면 저에게 털어놓으라고 대화를 시도했어요.<br>하지만 그녀는 마음을 쉽게 열지 않았죠. 그녀의 눈은 아무것도 들어있지 않은 빈 껍데기 처럼 보였어요.', goto: 10032 },
 10077: '[현미경]',
 10083: '[해골 모형]',
-
+10078: '[현미경]<br><br>아세트산 한방울을 떨어트렸다.',
+10079: '[현미경]<br><br>페놀프탈레인 한방울을 떨어트렸다.',
+10080: '[현미경]<br><br>포름알데히드 한방울을 떨어트렸다.',
+10081: '[현미경]<br><br>염산 한방울을 떨어트렸다.',
 // 도서관 관련
 10034: '[도서관]',
 
@@ -673,11 +677,13 @@ const pages = {
 10115: { text: '[의자와책상]<br><br>의자와 책상이 붉은 액체로 뒤덮혀 있다..', goto: 10098 },
 10116: '[컴퓨터]<br><br>피가 튄 컴퓨터가 있다.<br>윈도우가 잠겨있다.',
 10118: '[서랍]<br><br>서랍에 \'발명품\' 이라고 적혀있다.<br>6자리 알파벳 자물쇠가 걸려있다.',
+10131: '[금고]<br><br>알파벳을 입력하는 방식의 금고이다.<br>무언가 적혀있다.<br><br> message =',
 
 // 보건실 관련
 10135: '[보건실]<br><br>포스터 사진이 걸려있다.<br>안에서 소리가 들려온다.<br><br>"나는 누구..?"', 
 10136: '[보건실]', 
 10100: '[침대아래의속삭임]<br><br>속삭임이 들려온다.<br><br>"숨겨진 코드는?"', 
+10127: '[컴퓨터]<br><br>컴퓨터가 켜져있다.<br>윈도우가 잠겨있다.<br>화면에 사진이 있다.',
 
 
 // 직원용 화장실 관련
@@ -689,8 +695,8 @@ const pages = {
 // 별관 관련
 10137: '[별관]',
 10138: '[체육관]',
-10143: { text: '[일기장]<br><br>화장실에서 학생이 찔려죽은 시체와 교직원 화장실에서 교사가 찔려 죽은 시체가 나왔다고 한다. 설마 그애가..? 내가 말려야만 한다.', goto:10138}
-
+10143: { text: '[일기장]<br><br>화장실에서 학생이 찔려죽은 시체와 교직원 화장실에서 교사가 찔려 죽은 시체가 나왔다고 한다. 설마 그애가..? 내가 말려야만 한다.', goto:10138},
+10147: '[체육창고]<br><br>숫자 도어락에 잠겨있다.'
 };
 
 
@@ -1080,16 +1086,16 @@ const codePages = [
 
 
 const sensitivePagesCache = {};
-const sensitivePageIds =[384,
+const sensitivePageIds = [384,
   10020, 10026, 10036, 10039, 10044,
   10051, 10053, 10055, 10057, 10059,
   10062, 10064, 10067, 10071,
-  10078, 10079, 10080, 10081, 10082, 10084,
-  10094, 10095,
-  10100, 10101, 10105, 10107, 10110, 10112,
+  10082, 10084,
+  10095,
+  10101, 10105, 10107, 10110, 10112,
   10117, 10119, 10120, 10121, 10122, 10123, 10124, 10125,
-  10127, 10128, 10130, 10131, 10132, 10135,
-  10144, 10145, 10146, 10147, 10148
+  10128, 10130, 10132,
+  10144, 10145, 10146, 10148
 ];
 function showPage() {
   const card = document.getElementById('card');
@@ -1390,7 +1396,6 @@ else {
   }
 }
 wrap.addEventListener('click', () => {
-
   if (codePages.includes(currentPage)) {
     if (pageHistory.length > 0) {
       currentPage = pageHistory.pop();
@@ -1403,7 +1408,6 @@ wrap.addEventListener('click', () => {
   
   if (pageChoices[currentPage] || currentPage === 158) return;
   
- 
   if (sensitivePageIds.includes(currentPage)) {
     const pageData = sensitivePagesCache[currentPage];
     if (pageData && pageData.goto) {
@@ -1417,28 +1421,26 @@ wrap.addEventListener('click', () => {
   }
   
   if (currentPage === 0) {
-   const saved = localStorage.getItem("currentPage");
+    const saved = localStorage.getItem("currentPage");
     audio.play().catch(() => {});
     audioUnlocked = true;
     
-   if (saved && saved > 0) {
-  currentPage = parseInt(saved);
-  const savedHistory = localStorage.getItem("pageHistory");
-  if (savedHistory) {
-    pageHistory = JSON.parse(savedHistory);
-  }
-  const savedName = localStorage.getItem("playerName");
-  if (savedName) {
-    playerName = savedName;
-  }
-   
+    if (saved && saved > 0) {
+      currentPage = parseInt(saved);
+      const savedHistory = localStorage.getItem("pageHistory");
+      if (savedHistory) {
+        pageHistory = JSON.parse(savedHistory);
+      }
+      const savedName = localStorage.getItem("playerName");
+      if (savedName) {
+        playerName = savedName;
+      }
       const lastBGM = localStorage.getItem("lastBGM");
       if (lastBGM) {
         audio.src = lastBGM;
         audio.play().catch(() => {});
       }
     } else {
-     
       currentPage = 1;
       localStorage.setItem("currentPage", currentPage);
     }
@@ -1446,8 +1448,8 @@ wrap.addEventListener('click', () => {
     showPage();
     return;
   }
+
   const pageData = pages[currentPage];
-  
 
   if (typeof pageData === 'object' && pageData.goto) {
     pageHistory.push(currentPage);
@@ -1458,8 +1460,7 @@ wrap.addEventListener('click', () => {
     return;
   }
 
-
-  if (pages[currentPage + 1]) {
+  if (pages[currentPage + 1] || sensitivePageIds.includes(currentPage + 1)) {
     pageHistory.push(currentPage); 
     currentPage++;
     localStorage.setItem("currentPage", currentPage);
@@ -1467,7 +1468,6 @@ wrap.addEventListener('click', () => {
     showPage();
   }
 });
-
 document.getElementById("backBtn").addEventListener("click", () => {
   if (pageHistory.length > 0) {
   
@@ -1497,7 +1497,9 @@ document.addEventListener("keydown", (e) => {
       localStorage.setItem("currentPage", currentPage);
       showPage();
     }
-} else if (e.key === "ArrowRight" && !codePages.includes(currentPage) && !pageChoices[currentPage] && currentPage !== 158) {  const pageData = pages[currentPage];
+
+} else if (e.key === "ArrowRight" && !codePages.includes(currentPage) && !pageChoices[currentPage] && currentPage !== 158) {
+    const pageData = pages[currentPage];
     
     if (typeof pageData === 'object' && pageData.goto) {
       pageHistory.push(currentPage);
@@ -1505,7 +1507,7 @@ document.addEventListener("keydown", (e) => {
       localStorage.setItem("currentPage", currentPage);
       localStorage.setItem("pageHistory", JSON.stringify(pageHistory));
       showPage();
-    } else if (pages[currentPage + 1]) {
+    } else if (pages[currentPage + 1] || sensitivePageIds.includes(currentPage + 1)) {
       pageHistory.push(currentPage);  
       currentPage++;
       localStorage.setItem("currentPage", currentPage);
